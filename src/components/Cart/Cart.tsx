@@ -3,6 +3,15 @@ import "./Cart.css";
 
 const Cart = () => {
   const { carrito, actualizarCantidad, eliminarProducto } = useCart();
+
+  const costoDeEnvio = 10;
+
+  const subTotal = carrito.reduce(
+    (acc, producto) => acc + producto.precio * producto.cantidad,
+    0,
+  );
+  const total = subTotal + costoDeEnvio;
+
   const handleAumentarCantidad = (productoId: number) => {
     actualizarCantidad(productoId, 1);
   };
@@ -33,6 +42,7 @@ const Cart = () => {
           </div>
           <ul className="cart-items">
             {carrito.map((producto) => {
+              const totalPrecio = producto.precio * producto.cantidad;
               return (
                 <li className="cart-item" key={producto.id}>
                   <div className="product-info">
@@ -67,7 +77,7 @@ const Cart = () => {
                     </button>
                   </div>
 
-                  <p>$0</p>
+                  <p>${totalPrecio.toFixed(2)}</p>
 
                   <button
                     className="delete-btn"
@@ -81,6 +91,22 @@ const Cart = () => {
           </ul>
         </>
       )}
+
+      <div className="cart-summary">
+        <h2>
+          TU <span>CARRITO</span>
+        </h2>
+        <p>
+          Total Parcial: <span>${subTotal.toFixed(2)}</span>
+        </p>
+        <p>
+          Tarifa de envío<span>${costoDeEnvio.toFixed(2)}</span>
+        </p>
+        <p className="total">
+          Total:<span>${total.toFixed(2)}</span>
+        </p>
+        <button className="checkout-btn">PASAR POR LA CAJA</button>
+      </div>
     </div>
   );
 };

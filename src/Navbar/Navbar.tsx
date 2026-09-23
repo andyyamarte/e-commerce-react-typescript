@@ -1,7 +1,24 @@
+import { useCart } from "../components/CartContext/CartContext";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Navbar = () => {
+export interface NavbarProps {
+  alternarBuscador: () => void;
+}
+
+export const Navbar = ({ alternarBuscador }: NavbarProps) => {
+  const { carrito } = useCart();
+  const navigate = useNavigate();
+  const totalProductos = carrito.reduce(
+    (acc, producto) => acc + producto.cantidad,
+    0,
+  );
+
+  const handleHome = () => {
+    alternarBuscador();
+    navigate("/");
+  };
+
   return (
     <section className="header">
       <h1 className="logo">
@@ -15,12 +32,12 @@ export const Navbar = () => {
         </ul>
       </nav>
       <div className="icons">
-        <button className="search-button">
+        <button className="search-button" onClick={handleHome}>
           <i className="fas fa-search"></i>
         </button>
         <Link to="/carrito" className="icon-button">
           <i className="fas fa-shopping-cart"></i>
-          <span className="counter">0</span>
+          <span className="counter">{totalProductos}</span>
         </Link>
       </div>
     </section>

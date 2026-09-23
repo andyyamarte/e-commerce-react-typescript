@@ -4,7 +4,11 @@ import "./ProductList.css";
 import type { Products } from "../../types/Products";
 import { useNavigate } from "react-router-dom";
 
-export const ProductList = () => {
+interface ProductListProps {
+  buscarTermino?: string;
+}
+
+export const ProductList = ({ buscarTermino }: ProductListProps) => {
   const [productos, setProductos] = useState<Products[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [orden, setOrden] = useState<string>("Relevante");
@@ -48,6 +52,12 @@ export const ProductList = () => {
     }));
   };
 
+  const normalizarTexto = (texto: string) => {
+    return texto
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
   const productosFiltrados = productos.filter((producto) => {
     const matchCategoria =
       filtros.categoria.length === 0 ||
@@ -56,7 +66,16 @@ export const ProductList = () => {
     const matchTipo =
       filtros.tipo.length === 0 || filtros.tipo.includes(producto.tipo ?? "");
 
-    return matchCategoria && matchTipo;
+    const matchBuscar =
+      !buscarTermino ||
+      normalizarTexto(producto.nombre).includes(
+        normalizarTexto(buscarTermino),
+      ) ||
+      normalizarTexto(producto.descripcion).includes(
+        normalizarTexto(buscarTermino),
+      );
+
+    return matchCategoria && matchTipo && matchBuscar;
   });
 
   const handlerOrdenChange = (e: ChangeEvent<HTMLSelectElement>) => {
