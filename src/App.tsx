@@ -22,7 +22,7 @@ function App() {
   return (
     <>
       <CartProvider>
-        <Router>
+        <Router basename={import.meta.env.BASE_URL}>
           <Navbar alternarBuscador={alternarBuscador} />
           <Routes>
             <Route
