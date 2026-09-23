@@ -3,6 +3,7 @@ import "./DetailsProduct.css";
 import { useEffect, useState } from "react";
 import type { Products } from "../../types/Products";
 import { useCart } from "../CartContext/CartContext";
+import { API_BASE_URL } from "../../config";
 
 const DetailsProduct = () => {
   const { id } = useParams();
@@ -20,9 +21,7 @@ const DetailsProduct = () => {
   useEffect(() => {
     const fetchProducto = async () => {
       try {
-        const response = await fetch(
-          `https://api-ten-jet.vercel.app/products/${id}`,
-        );
+        const response = await fetch(`${API_BASE_URL}/products/${id}`);
 
         if (!response.ok) {
           throw new Error("Error al cargar los detalles del producto");

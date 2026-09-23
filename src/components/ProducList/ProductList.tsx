@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react";
 import "./ProductList.css";
 import type { Products } from "../../types/Products";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 
 interface ProductListProps {
   buscarTermino?: string;
@@ -23,7 +24,7 @@ export const ProductList = ({ buscarTermino }: ProductListProps) => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const response = await fetch("https://api-ten-jet.vercel.app/products");
+        const response = await fetch(`${API_BASE_URL}/products`);
 
         if (!response.ok) {
           throw new Error("Error al cargar los productos");
